@@ -9,7 +9,7 @@ This project is based on [JDK 17](https://www.oracle.com/java/technologies/javas
 
 
 ### articles
-- main page with choosing cinema, row and seat (shows only free seats);
+- main page with choosing cinema, row and seat (shows only free seat);
 - user can purchase ticket.
 
 ##Build

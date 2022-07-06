@@ -8,15 +8,15 @@ import java.util.Objects;
  * @version 1.
  * @since 17.06.2022.
  */
-public class Session {
+public class MovieSession {
     private int id;
     private String name;
 
-    public Session() {
+    public MovieSession() {
 
     }
 
-    public Session(int id, String name) {
+    public MovieSession(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -45,8 +45,8 @@ public class Session {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Session session = (Session) o;
-        return id == session.id && Objects.equals(name, session.name);
+        MovieSession movieSession = (MovieSession) o;
+        return id == movieSession.id && Objects.equals(name, movieSession.name);
     }
 
     @Override
