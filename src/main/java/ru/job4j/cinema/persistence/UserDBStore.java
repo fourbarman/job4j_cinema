@@ -1,12 +1,22 @@
 package ru.job4j.cinema.persistence;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.stereotype.Repository;
 import ru.job4j.cinema.model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * TicketDBStore.
+ *
+ * @author fourbarman (maks.java@yandex.ru).
+ * @version 1.
+ * @since 06.07.2022.
+ */
+@Repository
 public class UserDBStore {
     private BasicDataSource pool;
 
@@ -21,7 +31,7 @@ public class UserDBStore {
      */
     public List<User> getAll() {
         String query = "SELECT * FROM users";
-        List<User> users = null;
+        List<User> users = new ArrayList<>();
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {

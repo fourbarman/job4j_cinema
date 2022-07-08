@@ -2,6 +2,7 @@ package ru.job4j.cinema.persistence;
 
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.stereotype.Repository;
 import ru.job4j.cinema.model.MovieSession;
 
 import java.sql.*;
@@ -15,6 +16,7 @@ import java.util.Optional;
  * @version 1.
  * @since 06.07.2022.
  */
+@Repository
 public class MovieSessionDBStore {
     private final BasicDataSource pool;
 

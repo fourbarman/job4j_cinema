@@ -22,29 +22,4 @@
     <title>Сервис заказа билетов</title>
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">name</th>
-                <th scope="col">email</th>
-                <th scope="col">phone</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user: ${users}">
-                <td th:text="${user.id}">
-                <td>
-                <td th:text="${user.username}"/>
-                <td th:text="${user.email}"/>
-                <td th:text="${user.phone}"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
 </body>
-</html>
