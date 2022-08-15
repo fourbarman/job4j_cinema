@@ -30,7 +30,7 @@ public class UserDBStore {
      * @return List.
      */
     public List<User> getAll() {
-        String query = "SELECT * FROM users";
+        String query = "SELECT * FROM users;";
         List<User> users = new ArrayList<>();
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             try (ResultSet rs = ps.executeQuery()) {
@@ -61,7 +61,7 @@ public class UserDBStore {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPhone());
-            ps.executeQuery();
+            ps.execute();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     user.setId(rs.getInt(1));
@@ -84,6 +84,35 @@ public class UserDBStore {
         User user = null;
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("email"),
+                            rs.getString("phone")
+                    );
+                }
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return Optional.ofNullable(user);
+    }
+
+    /**
+     * findUserByEmailAndPhone.
+     *
+     * @param email String email.
+     * @param phone String phone.
+     * @return Optional.
+     */
+    public Optional<User> findUserByEmailAndPhone(String email, String phone) {
+        String query = "SELECT * FROM users WHERE email = ? AND phone = ?";
+        User user = null;
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
+            ps.setString(1, email);
+            ps.setString(2, phone);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     user = new User(

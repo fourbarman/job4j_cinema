@@ -26,15 +26,14 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="#">Cinema</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup"
-                aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
                 <a class="nav-item nav-link" th:href="@{/chooseMovieSession}">Заказ билета</a>
-                <a class="nav-item nav-link active" href="#">Сеансы</a>
+                <a class="nav-item nav-link" th:href="@{/moviesessions}">Сеансы</a>
                 <a class="nav-item nav-link" th:href="@{/tickets}">Билеты</a>
                 <a class="nav-item nav-link" th:href="@{/seats}">Места</a>
                 <a class="nav-item nav-link" th:href="@{/users}">Пользователи</a>
@@ -49,21 +48,18 @@
             </div>
         </div>
     </nav>
-    <table class="table table-hover">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Имя сеанса</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="moviesession: ${moviesessions}">
-            <td th:text="${moviesession.id}"/>
-            <td th:text="${moviesession.name}"/>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading"> Успешно! </h4>
+        <p>Спасибо, <span th:text="${ticket.user.username}"></span>!</p>
+        <hr>
+        <div>
+            <p>Данные Вашего билета:</p>
+            <p>Id билета: <span th:text="${ticket.id}"></span>.</p>
+            <p>Сеанс: <span th:text="${ticket.movieSession.name}"></span>.</p>
+            <p>Ряд: <span th:text="${ticket.seat.pos_row}"></span>.</p>
+            <p>Место: <span th:text="${ticket.seat.cell}"></span>.</p>
+        </div>
+    </div>
 </div>
 </body>
 </html>

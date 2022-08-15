@@ -1,4 +1,4 @@
-insert into seat(pos_row, cell)
+insert into seats(pos_row, cell)
 values
 (1, 1),
 (1, 2),

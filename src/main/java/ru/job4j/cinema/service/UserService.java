@@ -24,19 +24,43 @@ public class UserService {
         this.users = users;
     }
 
+    /**
+     * getAllUsers.
+     *
+     * @return all users.
+     */
     public List<User> getAllUsers() {
         return this.users.getAll();
     }
 
+    /**
+     * addUser.
+     *
+     * @param user User.
+     * @return added User.
+     */
     public Optional<User> addUser(User user) {
         return this.users.addUser(user);
     }
 
-    public Optional<User> findUserBiId(int id) {
-        return this.users.findUserById(id);
+    /**
+     * findUserByEmailAndPhone.
+     *
+     * @param email String Email.
+     * @param phone String Phone.
+     * @return found User by email and phone.
+     */
+    public Optional<User> findUserByEmailAndPhone(String email, String phone) {
+        return this.users.findUserByEmailAndPhone(email, phone);
     }
 
-    public void updateUser(User user) {
-        this.users.updateUser(user);
+    /**
+     * findUserById.
+     *
+     * @param id User id.
+     * @return found User.
+     */
+    public Optional<User> findUserById(int id) {
+        return this.users.findUserById(id);
     }
 }

@@ -2,15 +2,22 @@ package ru.job4j.cinema.model;
 
 import java.util.Objects;
 
+/**
+ * Seat.
+ *
+ * @author fourbarman (maks.java@yandex.ru).
+ * @version 1.
+ * @since 15.08.2022.
+ */
 public class Seat {
     private int id;
-    private int pos_row;
+    private int posRow;
     private int cell;
 
 
-    public Seat(int id, int pos_row, int cell) {
+    public Seat(int id, int posRow, int cell) {
         this.id = id;
-        this.pos_row = pos_row;
+        this.posRow = posRow;
         this.cell = cell;
     }
 
@@ -26,12 +33,12 @@ public class Seat {
         this.id = id;
     }
 
-    public int getPos_row() {
-        return pos_row;
+    public int getPosRow() {
+        return posRow;
     }
 
-    public void setPos_row(int pos_row) {
-        this.pos_row = pos_row;
+    public void setPosRow(int posRow) {
+        this.posRow = posRow;
     }
 
     public int getCell() {
@@ -44,23 +51,27 @@ public class Seat {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Seat seat = (Seat) o;
-        return id == seat.id && pos_row == seat.pos_row && cell == seat.cell;
+        return id == seat.id && posRow == seat.posRow && cell == seat.cell;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, pos_row, cell);
+        return Objects.hash(id, posRow, cell);
     }
 
     @Override
     public String toString() {
         return "Seats{"
                 + "id=" + id
-                +", pos_row=" + pos_row
-                +", cell=" + cell
+                + ", pos_row=" + posRow
+                + ", cell=" + cell
                 + '}';
     }
 }

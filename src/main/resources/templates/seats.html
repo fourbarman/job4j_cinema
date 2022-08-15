@@ -22,4 +22,50 @@
     <title>Сервис заказа билетов</title>
 </head>
 <body>
+<div class="container">
+    <div class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Cinema</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
+                <a class="nav-item nav-link" th:href="@{/chooseMovieSession}">Заказ билета</a>
+                <a class="nav-item nav-link" th:href="@{/moviesessions}">Сеансы</a>
+                <a class="nav-item nav-link" th:href="@{/tickets}">Билеты</a>
+                <a class="nav-item nav-link active" href="#">Места</a>
+                <a class="nav-item nav-link" th:href="@{/users}">Пользователи</a>
+                <a class="nav-item nav-link" th:if="${user.username == 'Гость'}" th:href="@{/loginPage}">
+                    <span th:text="${user.username}"></span>
+                    <span> | Войти</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.username != 'Гость'}" th:href="@{/logout}">
+                    <span th:text="${user.username}"></span>
+                    <span> | Выйти</span>
+                </a>
+            </div>
+        </div>
+    </div>
+        <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Ряд</th>
+                <th scope="col">Место</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="seat: ${seats}">
+                <td th:text="${seat.id}"/>
+                <td th:text="${seat.pos_row}"/>
+                <td th:text="${seat.cell}"/>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
+</html>

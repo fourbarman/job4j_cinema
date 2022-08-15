@@ -50,6 +50,32 @@ public class SeatsDBStore {
     }
 
     /**
+     * getFreeSeatsByMovieSession.
+     *
+     * @return List of all free seats counted by movieSession id.
+     */
+    public List<Seat> getSeatsByMovieSession(int movieSessionId) {
+        String query = "SELECT s.id, s.pos_row, s.cell FROM seats s, tickets t WHERE s.id = t.seats_id AND session_id = ?";
+        List<Seat> occupiedSeats = new ArrayList<>();
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
+            ps.setInt(1, movieSessionId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    occupiedSeats.add(new Seat(
+                            rs.getInt("id"),
+                            rs.getInt("pos_row"),
+                            rs.getInt("cell")
+                    ));
+                }
+            }
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return occupiedSeats;
+    }
+
+    /**
      * addSeat.
      *
      * @param seat Seat.
@@ -58,9 +84,10 @@ public class SeatsDBStore {
     public Optional<Seat> addSeat(Seat seat) {
         String query = "INSERT INTO seats(pos_row, cell) VALUES(?, ?)";
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, seat.getPos_row());
+            ps.setInt(1, seat.getPosRow());
             ps.setInt(2, seat.getCell());
-            try (ResultSet rs = ps.executeQuery()) {
+            ps.execute();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     seat.setId(rs.getInt(1));
                 }
@@ -96,22 +123,4 @@ public class SeatsDBStore {
         }
         return Optional.ofNullable(seat);
     }
-
-    /**
-     * updateSeat.
-     *
-     * @param seat Seat.
-     */
-    public void updateSeat(Seat seat) {
-        String query = "UPDATE seats SET pos_row = ?, cell = ? WHERE id = ?";
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
-            ps.setInt(1, seat.getPos_row());
-            ps.setInt(2, seat.getCell());
-            ps.setInt(3, seat.getId());
-            ps.executeUpdate();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-    }
-
 }

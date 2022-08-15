@@ -24,19 +24,22 @@ public class MovieSessionService {
         this.movieSessions = movieSessions;
     }
 
+    /**
+     * getAllSessions.
+     *
+     * @return all MovieSessions.
+     */
     public List<MovieSession> getAllSessions() {
         return this.movieSessions.getAll();
     }
 
-    public Optional<MovieSession> addSession(MovieSession movieSession) {
-        return this.movieSessions.addSession(movieSession);
-    }
-
+    /**
+     * findSessionById
+     *
+     * @param id MovieSession id.
+     * @return Movie session by id.
+     */
     public Optional<MovieSession> findSessionById(int id) {
         return this.movieSessions.getSessionById(id);
-    }
-
-    public void updateSession(MovieSession movieSession) {
-        this.movieSessions.updateSession(movieSession);
     }
 }

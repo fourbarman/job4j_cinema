@@ -26,15 +26,14 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="#">Cinema</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup"
-                aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
-                <a class="nav-item nav-link" th:href="@{/chooseMovieSession}">Заказ билета</a>
-                <a class="nav-item nav-link active" href="#">Сеансы</a>
+                <a class="nav-item nav-link active" href="#">Заказ билета</a>
+                <a class="nav-item nav-link" th:href="@{/moviesessions}">Сеансы</a>
                 <a class="nav-item nav-link" th:href="@{/tickets}">Билеты</a>
                 <a class="nav-item nav-link" th:href="@{/seats}">Места</a>
                 <a class="nav-item nav-link" th:href="@{/users}">Пользователи</a>
@@ -49,21 +48,15 @@
             </div>
         </div>
     </nav>
-    <table class="table table-hover">
-        <thead class="thead-light">
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Имя сеанса</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="moviesession: ${moviesessions}">
-            <td th:text="${moviesession.id}"/>
-            <td th:text="${moviesession.name}"/>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <div class="card-body">
+        <form>
+            <div class="list-group" th:each="moviesession: ${moviesessions}">
+                <a th:href="@{chooseSeat(moviesessionId=${moviesession.id})}"
+                   class="list-group-item list-group-item-action"
+                   th:text="${moviesession.name}"></a>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

@@ -1,8 +1,9 @@
 package ru.job4j.cinema.model;
 
 import java.util.Objects;
+
 /**
- * Session.
+ * MovieSession.
  *
  * @author fourbarman (maks.java@yandex.ru).
  * @version 1.
@@ -13,7 +14,6 @@ public class MovieSession {
     private String name;
 
     public MovieSession() {
-
     }
 
     public MovieSession(int id, String name) {

@@ -24,19 +24,32 @@ public class TicketService {
         this.tickets = tickets;
     }
 
+    /**
+     * getAllTickets.
+     *
+     * @return all tickets.
+     */
     public List<Ticket> getAllTickets() {
         return this.tickets.getAll();
     }
 
+    /**
+     * addTicket.
+     *
+     * @param ticket Ticket.
+     * @return added Ticket.
+     */
     public Optional<Ticket> addTicket(Ticket ticket) {
         return this.tickets.addTicket(ticket);
     }
 
+    /**
+     * findTicketById.
+     *
+     * @param id Ticket id.
+     * @return found Ticket.
+     */
     public Optional<Ticket> findTicketById(int id) {
         return this.tickets.findTicketById(id);
-    }
-
-    public void updateTicket(Ticket ticket) {
-        this.tickets.updateTicket(ticket);
     }
 }
