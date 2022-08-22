@@ -2,6 +2,7 @@ package ru.job4j.cinema.persistence;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ru.job4j.cinema.Main;
 import ru.job4j.cinema.model.MovieSession;
 import ru.job4j.cinema.model.Seat;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.*;
  * @version %I%, %G%.
  * @since 08.08.2022.
  */
+@DataJpaTest
 public class SeatsDBStoreTest {
     /**
      * Test getAll().

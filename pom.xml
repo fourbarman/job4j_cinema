@@ -115,10 +115,7 @@
       <version>4.6.1</version>
       <scope>test</scope>
     </dependency>
-
-
   </dependencies>
-
   <build>
     <plugins>
         <plugin>
@@ -148,7 +145,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
