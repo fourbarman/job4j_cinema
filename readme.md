@@ -18,11 +18,29 @@ The database layer is represented by:
 Tests use [JUnit5](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/).
 
 ## articles
-- registration and authentication.
-- main page with choosing cinema, row and seat (shows only free seat);
-- user can order ticket.
-- separate pages for users, tickets, sessions snd seats.
-
+- registration and authentication:
+![Registration and authentication](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/login_register_form.png)
+- registration form:
+![Register form](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/register_form.png)
+- if login fails than show message:
+![Login fail](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/login_fail.png)
+- user can order ticket:
+![Choose session](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/order_ticket_choose_session.png)
+- choose free row and seat:
+![Choose row and seat](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/order_ticket_choose_row_and_seat.png)
+- submit order:
+![Submit ticket order](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/order_ticket_submit.png)
+- success submit:
+![Submit success](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/order_ticket_success_info.png)
+- list of registered users:
+![users list](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/users_list.png)
+- list of sessions:
+![sessions list](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/sessions_list.png)
+- list of seats:
+![seats list](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/seats_list.png)
+- list of tickets:
+![tickets list](https://raw.github.com/fourbarman/screenshots/main/job4j_cinema/tickets_list.png)
+ 
 ## build and start
 Steps to start a program from sources:
 1. Create database with name "cinema".
