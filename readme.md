@@ -20,7 +20,8 @@ Tests use [JUnit5](https://junit.org/junit5/) and [Mockito](https://site.mockito
 ## articles
 - registration and authentication.
 - main page with choosing cinema, row and seat (shows only free seat);
-- user can purchase ticket.
+- user can order ticket.
+- separate pages for users, tickets, sessions snd seats.
 
 ## build and start
 Steps to start a program from sources:
@@ -32,10 +33,6 @@ Steps to start a program from sources:
 5. Execute it from terminal\cmd with command:
 ```java -jar job4j_cinema-1.0-SNAPSHOT.jar```
 6. Final step is just open Your browser and head to project index page: **http://localhost:8080/index**.
-
-### TODO list
-- [ ] Cover project code with unit tests.
-- [ ] Add proper JavaDoc.
 
 ### Contacts
 Feel free for contacting me:
