@@ -162,7 +162,7 @@ public class TicketController {
             model.addAttribute("moviesession", movie.get());
             model.addAttribute("seat", seat.get());
         }
-        return "/order";
+        return "order";
     }
 
     /**

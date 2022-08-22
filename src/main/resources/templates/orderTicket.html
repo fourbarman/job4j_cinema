@@ -63,7 +63,7 @@
                 <select class="form-control" id="seat.id" name="seat.id">
                     <option th:each="seat: ${seats}"
                             th:value="${seat.id}"
-                            th:text="${'ряд: ' + seat.pos_row + ' место: ' + seat.cell}"></option>
+                            th:text="${'ряд: ' + seat.posRow + ' место: ' + seat.cell}"></option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Сохранить</button>

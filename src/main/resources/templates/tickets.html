@@ -62,7 +62,7 @@
             <tr th:each="ticket: ${tickets}">
                 <td th:text="${ticket.id}"/>
                 <td th:text="${ticket.movieSession.name}"/>
-                <td th:text="${ticket.seat.pos_row}"/>
+                <td th:text="${ticket.seat.posRow}"/>
                 <td th:text="${ticket.seat.cell}"/>
                 <td th:text="${ticket.user.username}"/>
             </tr>

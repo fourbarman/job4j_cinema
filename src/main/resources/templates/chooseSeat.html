@@ -54,7 +54,7 @@
             <div class="list-group" th:each="seat: ${seats}">
                 <a th:href="@{order(moviesessionId=${moviesession.id}, seatId=${seat.id})}"
                    class="list-group-item list-group-item-action"
-                   th:text="${'Ряд: ' + seat.pos_row + ' Место: ' + seat.cell}"></a>
+                   th:text="${'Ряд: ' + seat.posRow + ' Место: ' + seat.cell}"></a>
             </div>
         </form>
     </div>

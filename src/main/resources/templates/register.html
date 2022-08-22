@@ -30,7 +30,7 @@
         <div th:if="${fail}" class="alert alert-danger" role="alert">
             Пользователь с такой почтой\телефоном уже зарегистрирован!
         </div>
-        <form th:action="@{/register}" method="POST">
+        <form th:action="@{register}" method="POST">
             <div class="form-group">
                 <label>Имя пользователя</label>
                 <input type="text" class="form-control" name="username" required>

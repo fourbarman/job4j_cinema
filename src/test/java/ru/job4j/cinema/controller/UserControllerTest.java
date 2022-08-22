@@ -116,7 +116,7 @@ public class UserControllerTest {
         UserController userController = new UserController(userService);
         boolean fail = true;
         String page = userController.registerForm(model, fail);
-        assertThat(page).isEqualTo("/register");
+        assertThat(page).isEqualTo("register");
     }
 
     /**

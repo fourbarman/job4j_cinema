@@ -100,7 +100,7 @@ public class UserController {
     @GetMapping("/register")
     public String registerForm(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("fail", fail != null);
-        return "/register";
+        return "register";
     }
 
     /**

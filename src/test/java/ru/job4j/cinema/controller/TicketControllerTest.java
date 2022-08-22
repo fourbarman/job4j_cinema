@@ -153,7 +153,7 @@ public class TicketControllerTest {
         String page = ticketController.order(model, 1, 1, new MockHttpSession());
         verify(model).addAttribute("moviesession", movieSession);
         verify(model).addAttribute("seat", seat);
-        assertThat(page).isEqualTo("/order");
+        assertThat(page).isEqualTo("order");
     }
 
     /**
