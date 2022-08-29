@@ -36,10 +36,7 @@ public class MovieSessionDBStore {
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    sessionList.add(new MovieSession(
-                            rs.getInt("id"),
-                            rs.getString("session_name")
-                    ));
+                    sessionList.add(getSessionFromRS(rs));
                 }
             }
         } catch (SQLException sqlException) {
@@ -85,15 +82,26 @@ public class MovieSessionDBStore {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    session = new MovieSession(
-                            rs.getInt("id"),
-                            rs.getString("session_name")
-                    );
+                    session = getSessionFromRS(rs);
                 }
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         return Optional.ofNullable(session);
+    }
+
+    /**
+     * Return MovieSession from ResultSet.
+     *
+     * @param resultSet ResultSet.
+     * @return MovieSession.
+     * @throws SQLException Exception.
+     */
+    private MovieSession getSessionFromRS(ResultSet resultSet) throws SQLException {
+        return new MovieSession(
+                resultSet.getInt("id"),
+                resultSet.getString("session_name")
+        );
     }
 }

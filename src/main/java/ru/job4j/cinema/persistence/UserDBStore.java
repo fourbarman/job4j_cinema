@@ -35,12 +35,7 @@ public class UserDBStore {
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    users.add(new User(
-                            rs.getInt("id"),
-                            rs.getString("username"),
-                            rs.getString("email"),
-                            rs.getString("phone")
-                    ));
+                    users.add(getUserFromRS(rs));
                 }
             }
         } catch (SQLException sqlException) {
@@ -86,12 +81,7 @@ public class UserDBStore {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    user = new User(
-                            rs.getInt("id"),
-                            rs.getString("username"),
-                            rs.getString("email"),
-                            rs.getString("phone")
-                    );
+                    user = getUserFromRS(rs);
                 }
             }
         } catch (SQLException sqlException) {
@@ -115,12 +105,7 @@ public class UserDBStore {
             ps.setString(2, phone);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    user = new User(
-                            rs.getInt("id"),
-                            rs.getString("username"),
-                            rs.getString("email"),
-                            rs.getString("phone")
-                    );
+                    user = getUserFromRS(rs);
                 }
             }
         } catch (SQLException sqlException) {
@@ -145,5 +130,21 @@ public class UserDBStore {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+    }
+
+    /**
+     * Return User from ResultSet.
+     *
+     * @param resultSet ResultSet.
+     * @return User.
+     * @throws SQLException Exception.
+     */
+    private User getUserFromRS(ResultSet resultSet) throws SQLException {
+        return new User(
+                resultSet.getInt("id"),
+                resultSet.getString("username"),
+                resultSet.getString("email"),
+                resultSet.getString("phone")
+        );
     }
 }

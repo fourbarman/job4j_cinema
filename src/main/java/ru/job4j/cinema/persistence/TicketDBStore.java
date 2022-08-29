@@ -33,39 +33,27 @@ public class TicketDBStore {
      * @return List.
      */
     public List<Ticket> getAll() {
-        String query = "SELECT t.id AS ticket_id, "
-                + "       sess.id AS session_id, "
-                + "       sess.session_name AS session_name, "
-                + "       u.id AS user_id, "
-                + "       u.username AS username, "
-                + "       u.email AS user_email, "
-                + "       u.phone AS user_phone, "
-                + "       s.id AS seat_id,"
-                + "       s.pos_row AS seat_pos_row, "
-                + "       s.cell AS seat_cell "
-                + "FROM tickets t, "
-                + "     sessions sess, "
-                + "     users u,  "
-                + "     seats s "
-                + "WHERE t.seats_id = s.id AND "
-                + "      t.session_id = sess.id AND "
-                + "      t.user_id = u.id";
+        String query = """
+                SELECT t.id AS ticket_id,
+                       sess.id AS session_id,
+                       sess.session_name AS session_name,
+                       u.id AS user_id,
+                       u.username AS username,
+                       u.email AS user_email,
+                       u.phone AS user_phone,
+                       s.id AS seat_id,
+                       s.pos_row AS seat_pos_row,
+                       s.cell AS seat_cell
+                FROM tickets t
+                INNER JOIN sessions sess ON t.session_id = sess.id
+                INNER JOIN users u ON t.user_id = u.id
+                INNER JOIN seats s ON t.seats_id = s.id
+                """;
         List<Ticket> tickets = new ArrayList<>();
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    tickets.add(new Ticket(
-                            rs.getInt("ticket_id"),
-                            new MovieSession(rs.getInt("session_id"),
-                                    rs.getString("session_name")),
-                            new Seat(rs.getInt("seat_id"),
-                                    rs.getInt("seat_pos_row"),
-                                    rs.getInt("seat_cell")),
-                            new User(rs.getInt("user_id"),
-                                    rs.getString("username"),
-                                    rs.getString("user_email"),
-                                    rs.getString("user_phone"))
-                    ));
+                    tickets.add(getTicketFromRS(rs));
                 }
             }
         } catch (SQLException sqlException) {
@@ -81,8 +69,7 @@ public class TicketDBStore {
      * @return Optional.
      */
     public Optional<Ticket> addTicket(Ticket ticket) {
-        String query = "INSERT INTO tickets(session_id, seats_id, user_id) "
-                + "VALUES (?, ?, ?)";
+        String query = "INSERT INTO tickets(session_id, seats_id, user_id) VALUES (?, ?, ?)";
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, ticket.getMovieSession().getId());
             ps.setInt(2, ticket.getSeat().getId());
@@ -106,45 +93,59 @@ public class TicketDBStore {
      * @return Optional.
      */
     public Optional<Ticket> findTicketById(int id) {
-        String query = "SELECT t.id AS ticket_id, "
-                + "       sess.id AS session_id, "
-                + "       sess.session_name AS session_name, "
-                + "       u.id AS user_id, "
-                + "       u.username AS username, "
-                + "       u.email AS user_email, "
-                + "       u.phone AS user_phone, "
-                + "       s.id AS seat_id,"
-                + "       s.pos_row AS seat_pos_row, "
-                + "       s.cell AS seat_cell "
-                + "FROM tickets t, "
-                + "     sessions sess, "
-                + "     users u,  "
-                + "     seats s "
-                + "WHERE t.seats_id = s.id AND "
-                + "      t.session_id = sess.id AND "
-                + "      t.user_id = u.id AND t.id = ?";
+        String query = """
+                SELECT t.id AS ticket_id,
+                       sess.id AS session_id,
+                       sess.session_name AS session_name,
+                       u.id AS user_id,
+                       u.username AS username,
+                       u.email AS user_email,
+                       u.phone AS user_phone,
+                       s.id AS seat_id,
+                       s.pos_row AS seat_pos_row,
+                       s.cell AS seat_cell
+                FROM tickets t
+                     INNER JOIN sessions sess ON t.session_id = sess.id
+                     INNER JOIN users u ON t.user_id = u.id
+                     INNER JOIN seats s ON t.seats_id = s.id
+                WHERE t.id = 1
+                """;
         Ticket ticket = null;
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ticket = new Ticket(
-                            rs.getInt("ticket_id"),
-                            new MovieSession(rs.getInt("session_id"),
-                                    rs.getString("session_name")),
-                            new Seat(rs.getInt("seat_id"),
-                                    rs.getInt("seat_pos_row"),
-                                    rs.getInt("seat_cell")),
-                            new User(rs.getInt("user_id"),
-                                    rs.getString("username"),
-                                    rs.getString("user_email"),
-                                    rs.getString("user_phone"))
-                    );
+                    ticket = getTicketFromRS(rs);
                 }
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         return Optional.ofNullable(ticket);
+    }
+
+    /**
+     * Return Ticket from ResultSet.
+     *
+     * @param resultSet ResultSet.
+     * @return Ticket.
+     * @throws SQLException Exception.
+     */
+    private Ticket getTicketFromRS(ResultSet resultSet) throws SQLException {
+        return new Ticket(
+                resultSet.getInt("ticket_id"),
+                new MovieSession(
+                        resultSet.getInt("session_id"),
+                        resultSet.getString("session_name")),
+                new Seat(
+                        resultSet.getInt("seat_id"),
+                        resultSet.getInt("seat_pos_row"),
+                        resultSet.getInt("seat_cell")),
+                new User(
+                        resultSet.getInt("user_id"),
+                        resultSet.getString("username"),
+                        resultSet.getString("user_email"),
+                        resultSet.getString("user_phone"))
+        );
     }
 }

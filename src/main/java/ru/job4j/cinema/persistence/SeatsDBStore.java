@@ -35,11 +35,7 @@ public class SeatsDBStore {
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    seats.add(new Seat(
-                            rs.getInt("id"),
-                            rs.getInt("pos_row"),
-                            rs.getInt("cell")
-                    ));
+                    seats.add(getSeatFromRS(rs));
                 }
             }
 
@@ -55,17 +51,18 @@ public class SeatsDBStore {
      * @return List of all free seats counted by movieSession id.
      */
     public List<Seat> getSeatsByMovieSession(int movieSessionId) {
-        String query = "SELECT s.id, s.pos_row, s.cell FROM seats s, tickets t WHERE s.id = t.seats_id AND session_id = ?";
+        String query = """
+                SELECT s.id, s.pos_row, s.cell
+                FROM seats s 
+                INNER JOIN tickets t 
+                ON s.id = t.seats_id AND session_id = ?
+                """;
         List<Seat> occupiedSeats = new ArrayList<>();
         try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
             ps.setInt(1, movieSessionId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    occupiedSeats.add(new Seat(
-                            rs.getInt("id"),
-                            rs.getInt("pos_row"),
-                            rs.getInt("cell")
-                    ));
+                    occupiedSeats.add(getSeatFromRS(rs));
                 }
             }
 
@@ -111,16 +108,27 @@ public class SeatsDBStore {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    seat = new Seat(
-                            rs.getInt("id"),
-                            rs.getInt("pos_row"),
-                            rs.getInt("cell")
-                    );
+                    seat = getSeatFromRS(rs);
                 }
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         return Optional.ofNullable(seat);
+    }
+
+    /**
+     * Return Seat from ResultSet.
+     *
+     * @param resultSet ResultSet.
+     * @return Seat.
+     * @throws SQLException Exception.
+     */
+    private Seat getSeatFromRS(ResultSet resultSet) throws SQLException {
+        return new Seat(
+                resultSet.getInt("id"),
+                resultSet.getInt("pos_row"),
+                resultSet.getInt("cell")
+        );
     }
 }
