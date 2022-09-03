@@ -3,7 +3,7 @@ package ru.job4j.cinema.service;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.User;
-import ru.job4j.cinema.persistence.UserDBStore;
+import ru.job4j.cinema.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,9 @@ import java.util.Optional;
 @ThreadSafe
 @Service
 public class UserService {
-    private final UserDBStore users;
+    private final UserRepository users;
 
-    public UserService(UserDBStore users) {
+    public UserService(UserRepository users) {
         this.users = users;
     }
 

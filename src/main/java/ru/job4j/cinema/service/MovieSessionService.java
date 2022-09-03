@@ -3,7 +3,7 @@ package ru.job4j.cinema.service;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cinema.model.MovieSession;
-import ru.job4j.cinema.persistence.MovieSessionDBStore;
+import ru.job4j.cinema.repository.MovieSessionRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,9 @@ import java.util.Optional;
 @ThreadSafe
 @Service
 public class MovieSessionService {
-    private final MovieSessionDBStore movieSessions;
+    private final MovieSessionRepository movieSessions;
 
-    public MovieSessionService(MovieSessionDBStore movieSessions) {
+    public MovieSessionService(MovieSessionRepository movieSessions) {
         this.movieSessions = movieSessions;
     }
 

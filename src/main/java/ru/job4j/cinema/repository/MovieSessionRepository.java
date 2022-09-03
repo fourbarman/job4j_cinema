@@ -1,4 +1,4 @@
-package ru.job4j.cinema.persistence;
+package ru.job4j.cinema.repository;
 
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -18,10 +18,13 @@ import java.util.Optional;
  * @since 06.07.2022.
  */
 @Repository
-public class MovieSessionDBStore {
+public class MovieSessionRepository {
     private final BasicDataSource pool;
+    private static final String SELECT_ALL = "SELECT * FROM sessions;";
+    private static final String INSERT_SESSION = "INSERT INTO sessions(session_name) VALUES (?);";
+    private static final String SELECT_SESSION_BY_ID = "SELECT * FROM sessions WHERE id = ?;";
 
-    public MovieSessionDBStore(BasicDataSource pool) {
+    public MovieSessionRepository(BasicDataSource pool) {
         this.pool = pool;
     }
 
@@ -31,9 +34,8 @@ public class MovieSessionDBStore {
      * @return List.
      */
     public List<MovieSession> getAll() {
-        String query = "SELECT * FROM sessions";
         List<MovieSession> sessionList = new ArrayList<>();
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(SELECT_ALL)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     sessionList.add(getSessionFromRS(rs));
@@ -52,8 +54,7 @@ public class MovieSessionDBStore {
      * @return Optional.
      */
     public Optional<MovieSession> addSession(MovieSession session) {
-        String query = "INSERT INTO sessions(session_name) VALUES (?)";
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(INSERT_SESSION, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, session.getName());
             ps.execute();
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -76,9 +77,8 @@ public class MovieSessionDBStore {
      * @return Optional.
      */
     public Optional<MovieSession> getSessionById(int id) {
-        String query = "SELECT * FROM sessions WHERE id = ?";
         MovieSession session = null;
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(SELECT_SESSION_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {

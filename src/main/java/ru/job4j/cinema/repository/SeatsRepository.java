@@ -1,4 +1,4 @@
-package ru.job4j.cinema.persistence;
+package ru.job4j.cinema.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.stereotype.Repository;
@@ -17,10 +17,19 @@ import java.util.Optional;
  * @since 06.07.2022.
  */
 @Repository
-public class SeatsDBStore {
-    private BasicDataSource pool;
+public class SeatsRepository {
+    private final BasicDataSource pool;
+    private static final String SELECT_ALL = "SELECT * FROM seats;";
+    private static final String SELECT_SEAT_BY_MOVIE_SESSION = """
+            SELECT s.id, s.pos_row, s.cell
+            FROM seats s
+            INNER JOIN tickets t
+            ON s.id = t.seats_id AND session_id = ?;
+            """;
+    private static final String INSERT_SEAT = "INSERT INTO seats(pos_row, cell) VALUES(?, ?);";
+    private static final String SELECT_SEAT_BY_ID = "SELECT * FROM seats WHERE id = ?;";
 
-    public SeatsDBStore(BasicDataSource pool) {
+    public SeatsRepository(BasicDataSource pool) {
         this.pool = pool;
     }
 
@@ -30,9 +39,8 @@ public class SeatsDBStore {
      * @return List.
      */
     public List<Seat> getAll() {
-        String query = "SELECT * FROM seats";
         List<Seat> seats = new ArrayList<>();
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(SELECT_ALL)) {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     seats.add(getSeatFromRS(rs));
@@ -51,14 +59,8 @@ public class SeatsDBStore {
      * @return List of all free seats counted by movieSession id.
      */
     public List<Seat> getSeatsByMovieSession(int movieSessionId) {
-        String query = """
-                SELECT s.id, s.pos_row, s.cell
-                FROM seats s 
-                INNER JOIN tickets t 
-                ON s.id = t.seats_id AND session_id = ?
-                """;
         List<Seat> occupiedSeats = new ArrayList<>();
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(SELECT_SEAT_BY_MOVIE_SESSION)) {
             ps.setInt(1, movieSessionId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -79,8 +81,7 @@ public class SeatsDBStore {
      * @return Optional.
      */
     public Optional<Seat> addSeat(Seat seat) {
-        String query = "INSERT INTO seats(pos_row, cell) VALUES(?, ?)";
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(INSERT_SEAT, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, seat.getPosRow());
             ps.setInt(2, seat.getCell());
             ps.execute();
@@ -102,9 +103,8 @@ public class SeatsDBStore {
      * @return Optional.
      */
     public Optional<Seat> findSeatById(int id) {
-        String query = "SELECT * FROM seats WHERE id = ?";
         Seat seat = null;
-        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(query)) {
+        try (Connection cn = pool.getConnection(); PreparedStatement ps = cn.prepareStatement(SELECT_SEAT_BY_ID)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
