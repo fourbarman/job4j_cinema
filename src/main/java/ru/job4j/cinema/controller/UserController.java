@@ -39,7 +39,7 @@ public class UserController {
      */
     @GetMapping("/users")
     public String users(Model model, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("users", users.getAllUsers());
         return "users";
     }
@@ -119,20 +119,5 @@ public class UserController {
         HttpSession session = req.getSession();
         session.setAttribute("user", userDb.get());
         return "redirect:/index";
-    }
-
-    /**
-     * Returns user from HttpSession.
-     *
-     * @param model   Model.
-     * @param session HttpSession.
-     */
-    private void getUserFromSession(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setUsername("Гость");
-        }
-        model.addAttribute("user", user);
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.service.MovieSessionService;
 import ru.job4j.cinema.service.SeatService;
 
@@ -39,7 +38,7 @@ public class SeatController {
      */
     @GetMapping("/seats")
     public String seats(Model model, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("seats", this.seats.getAll());
         return "seats";
     }
@@ -54,7 +53,7 @@ public class SeatController {
      */
     @GetMapping("/chooseSeat")
     public String chooseSeat(Model model, HttpSession session, @RequestParam("moviesessionId") int moviesessionId) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("moviesession", this.moviesessions.findSessionById(moviesessionId).get());
         model.addAttribute("seats", this.seats.getFreeSeatsByMovieSession(moviesessionId));
         return "chooseSeat";
@@ -69,20 +68,5 @@ public class SeatController {
     @PostMapping("/sendSeat")
     public String sendSeat(@RequestParam("seat.id") int seatId) {
         return "redirect:/orderTicket?seatId=" + seatId;
-    }
-
-    /**
-     * GetUserFromSession.
-     *
-     * @param model   Model.
-     * @param session HttpSession.
-     */
-    private void getUserFromSession(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setUsername("Гость");
-        }
-        model.addAttribute("user", user);
     }
 }

@@ -49,7 +49,7 @@ public class TicketController {
      */
     @GetMapping("/tickets")
     public String tickets(Model model, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("tickets", this.tickets.getAllTickets());
         return "tickets";
     }
@@ -63,7 +63,7 @@ public class TicketController {
      */
     @GetMapping("/orderTicket")
     public String order(Model model, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("moviesessions", this.moviesessions.getAllSessions());
         model.addAttribute("seats", this.seats.getAll());
         return "orderTicket";
@@ -108,7 +108,7 @@ public class TicketController {
      */
     @GetMapping("/success")
     public String success(Model model, @RequestParam("ticketId") int ticketId, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("ticket", tickets.findTicketById(ticketId).get());
         return "success";
     }
@@ -123,24 +123,9 @@ public class TicketController {
      */
     @GetMapping("/fail")
     public String fail(Model model, @RequestParam("formSeatId") int formSeatId, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("seat", seats.findSeatById(formSeatId).get());
         return "fail";
-    }
-
-    /**
-     * Get user from HttpSession.
-     *
-     * @param model   Model.
-     * @param session HttpSession.
-     */
-    private void getUserFromSession(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setUsername("Гость");
-        }
-        model.addAttribute("user", user);
     }
 
     /**
@@ -155,7 +140,7 @@ public class TicketController {
     @GetMapping("/order")
     public String order(Model model, @RequestParam("moviesessionId") int moviesessionId,
                         @RequestParam("seatId") int seatId, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         Optional<MovieSession> movie = this.moviesessions.findSessionById(moviesessionId);
         Optional<Seat> seat = this.seats.findSeatById(seatId);
         if (movie.isPresent() && seat.isPresent()) {

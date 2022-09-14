@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.job4j.cinema.model.User;
 import ru.job4j.cinema.service.MovieSessionService;
 
 import javax.servlet.http.HttpSession;
@@ -36,7 +35,7 @@ public class MovieSessionController {
      */
     @GetMapping("/moviesessions")
     public String movieSessions(Model model, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("moviesessions", this.movieSessions.getAllSessions());
         return "moviesessions";
     }
@@ -50,7 +49,7 @@ public class MovieSessionController {
      */
     @GetMapping("/chooseMovieSession")
     public String chooseMovieSessions(Model model, HttpSession session) {
-        getUserFromSession(model, session);
+        model.addAttribute("user", session.getAttribute("user"));
         model.addAttribute("moviesessions", this.movieSessions.getAllSessions());
         return "chooseMovieSession";
     }
@@ -64,20 +63,5 @@ public class MovieSessionController {
     @PostMapping("/chooseMovieSession")
     public String retainMovieSessions(@RequestParam("moviesessionId") int moviesessionId) {
         return "redirect:/chooseSeat?moviesessionId=" + moviesessionId;
-    }
-
-    /**
-     * Get user from HttpSession.
-     *
-     * @param model   Model.
-     * @param session HttpSession.
-     */
-    private void getUserFromSession(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setUsername("Гость");
-        }
-        model.addAttribute("user", user);
     }
 }

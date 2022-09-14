@@ -2,25 +2,28 @@ package ru.job4j.cinema.filter;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import ru.job4j.cinema.model.User;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * AuthFilter.
+ * UserSessionFilter.
+ * Add attribute to request
  *
  * @author fourbarman (maks.java@yandex.ru).
  * @version 1.
- * @since 15.08.2022.
+ * @since 14.09.2022.
  */
 @Component
-@Order(0)
-public class AuthFilter implements Filter {
+@Order(1)
+public class UserSessionFilter implements Filter {
     /**
      * doFilter.
-     * If URI ends with loginPage or login or register than passes, if not - block requests.
+     * If "user" attribute is null than set it to "guest" or set it to user as if in request.
      *
      * @param request  The request to process
      * @param response The response associated with the request
@@ -31,21 +34,16 @@ public class AuthFilter implements Filter {
      * @throws ServletException ServletException.
      */
     @Override
-    public void doFilter(
-            ServletRequest request,
-            ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        String uri = req.getRequestURI();
-        if (uri.endsWith("loginPage") || uri.endsWith("login") || uri.endsWith("register")) {
-            chain.doFilter(req, res);
-            return;
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setUsername("Гость");
         }
-        if (req.getSession().getAttribute("user") == null) {
-            res.sendRedirect(req.getContextPath() + "/loginPage");
-            return;
-        }
+        req.setAttribute("user", user);
         chain.doFilter(req, res);
     }
 }
